@@ -1,29 +1,123 @@
 package ru.noxis.financeuiapp.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import ru.noxis.financeuiapp.R
+import ru.noxis.financeuiapp.enums.CryptoCardStyle
+import ru.noxis.financeuiapp.model.CryptoCardData
 import ru.noxis.financeuiapp.ui.theme.CryptoLightGray
 import ru.noxis.financeuiapp.ui.theme.FinanceUiAppTheme
+import java.text.DecimalFormat
 
+@Composable
+fun CryptoCard(
+    style: CryptoCardStyle = CryptoCardStyle.Dark,
+    data: CryptoCardData
+) {
 
+    val cardBackground: Color = when (style) {
+        CryptoCardStyle.Dark -> Color(0xFF000000)
+        CryptoCardStyle.Light -> Color(0xFFadc9ae)
+    }
 
+    val textColor: Color = when (style) {
+        CryptoCardStyle.Dark -> Color(0xFFFFFFFF)
+        CryptoCardStyle.Light -> Color(0xFF000000)
+    }
 
+    Box {
+        CryptoCardBackground(cardBackground)
+
+        CryptoCardContent(data, textColor)
+    }
+
+}
 
 
 @Composable
-fun CryptoCardBackground(
+private fun CryptoCardContent(
+    data: CryptoCardData,
+    textColor: Color
+) {
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.size(150.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(12.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row {
+                Text(
+                    text = "${data.valueChange}%",
+                    color = textColor,
+                    style = MaterialTheme.typography.labelMedium
+                )
+                ChangeIcon(data.valueChange)
+            }
+
+            Icon(
+                painter = painterResource(id = data.icon),
+                contentDescription = "Card Icon",
+                tint = Color.Black,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+        Column(
+            verticalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier.padding(12.dp)
+        ) {
+            Text(
+                text = data.name,
+                color = textColor,
+                style = MaterialTheme.typography.labelMedium
+            )
+            Text(
+                text = "${data.value}",
+                color = textColor,
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Text(
+                text = formatCurrentTotal(data.currentTotal),
+                color = textColor,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+    }
+}
+
+private fun formatCurrentTotal(currentTotal: Long): String {
+    val decimalFormat = DecimalFormat("$#,###")
+    return decimalFormat.format(currentTotal)
+}
+
+
+@Composable
+private fun CryptoCardBackground(
     cardBackground: Color = Color.Black,
     bubbleColor: Color = CryptoLightGray,
     backgroundColor: Color = Color.White,
@@ -112,6 +206,14 @@ fun CryptoCardBackground(
 @Composable
 private fun CryptoCardPreview() {
     FinanceUiAppTheme {
-        CryptoCardBackground()
+        CryptoCard(
+            data = CryptoCardData(
+                name = "Bitcoin",
+                icon = R.drawable.ic_btc,
+                value = 3.689087f,
+                valueChange = -18,
+                currentTotal = 98160
+            )
+        )
     }
 }
