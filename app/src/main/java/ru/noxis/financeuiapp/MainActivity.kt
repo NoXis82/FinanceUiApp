@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import ru.noxis.financeuiapp.screens.CryptoWalletCoinCardPairRow
+import ru.noxis.financeuiapp.screens.CryptoWalletHomeScreen
 import ru.noxis.financeuiapp.screens.FinancePieRowDemoScreen
 import ru.noxis.financeuiapp.ui.theme.FinanceUiAppTheme
 
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FinanceUiAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    FinancePieRowDemoScreen(modifier = Modifier.padding(innerPadding))
+                    CryptoWalletHomeScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
