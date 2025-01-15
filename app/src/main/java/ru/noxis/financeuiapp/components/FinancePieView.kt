@@ -1,5 +1,10 @@
 package ru.noxis.financeuiapp.components
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +21,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -111,6 +118,15 @@ fun PlainPie(
     val fullColor = keyColor.copy(alpha = 0.3f)
     val currentAngle = currentValue / fullValue * 360f
 
+    val animatedProgress = remember { Animatable(0f) }
+
+    LaunchedEffect(animatedProgress) {
+        animatedProgress.animateTo(
+            targetValue = currentAngle,
+            animationSpec = tween(durationMillis = 2000, easing = FastOutSlowInEasing)
+        )
+    }
+
     Canvas(
         modifier = Modifier
             .size(pieSize)
@@ -129,7 +145,7 @@ fun PlainPie(
         drawArc(
             color = keyColor,
             startAngle = 250f,
-            sweepAngle = currentAngle,//animatedProgress.value,
+            sweepAngle = animatedProgress.value,//currentAngle,
             useCenter = true
         )
 
