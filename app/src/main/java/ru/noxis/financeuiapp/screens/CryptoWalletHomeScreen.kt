@@ -17,11 +17,11 @@ import ru.noxis.financeuiapp.model.CryptoCardData
 
 @Composable
 @Preview(showBackground = true)
-fun CryptoWalletHomeScreen() {
-    Column {
+fun CryptoWalletHomeScreen(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         CryptoWalletCoinCardPairRow()
 
-      //  AssetCardListDemoScreen()
+        AssetCardListDemoScreen()
     }
 }
 
